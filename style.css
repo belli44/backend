@@ -1,0 +1,47 @@
+/* style.css */
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+  }
+  .Hero {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  .infoPro {
+    text-align: right;
+  }
+  .prix {
+    margin: 10px 0;
+  }
+  .taile button {
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .form input {
+    display: block;
+    margin: 10px 0;
+    padding: 11px;
+    border: 1px solid black;
+    width: 100%;
+  }
+  .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  .more img {
+    margin: 10px;
+  }
+
+  @media(max-width: 1069px){
+    .Hero{
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }

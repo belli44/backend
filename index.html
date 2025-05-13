@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب المنتج</title>
+</head>
+<body>
+    <header>
+        <img src="abstract-modern-ecommerce-logo-ecommerce-logo-design-shop-logo-design-template-creative-ecommerce-logo-vector-removebg-preview.png" height="80" alt="Logo" class="logo">
+    </header>
+    <hr>
+    <section class="Hero">
+        <div class="imag1">
+            <img src="https://sudomaine.urlanding.com/public/products/1747068892_1000158871.jpg" height="550" alt="Product Image">
+        </div>
+        <div class="infoPro">
+            <h1 class="head1" style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
+                للطلب المرجوا ملء الإستمارة أسفله
+            </h1>
+            <h4 style="font-family: 'Trebuchet MS', sans-serif;">
+                Ensemble Famille satan
+            </h4>
+            <div class="prix">
+                <span><del>300MAD</del></span>
+                <span class="now">249MAD</span>
+            </div>
+            <h4>إختر المقاس</h4>
+            <div class="taile">
+                <button type="button" class="size-btn" data-size="L">L</button>
+                <button type="button" class="size-btn" data-size="XL">XL</button>
+                <button type="button" class="size-btn" data-size="2XL">2XL</button>
+                <button type="button" class="size-btn" data-size="3XL">3XL</button>
+            </div>
+            <div class="form">
+                <form id="orderForm" action="/send" method="POST">
+                    <div class="box">
+                        <input type="text" id="name" name="name" placeholder="الاسم الكامل" required>
+                        <input type="tel" id="phone" name="phone" placeholder="الهاتف" required>
+                    </div>
+                    <input type="text" id="address" name="address" placeholder="العنوان" required>
+                    <input type="text" id="city" name="city" placeholder="المدينة" required>
+                    <button type="submit" class="btn">اطلب الآن</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <hr>
+    <h1 class="bn">مزيد من الصور</h1>
+    <section class="more">
+        <div class="content">
+            <img src="https://sudomaine.urlanding.com/public/images/sections/1747068788_1000158868.jpg" height="600" alt="">
+            <img src="https://sudomaine.urlanding.com/public/products/1747068892_1000158871.jpg" height="600" alt="">
+            <img src="https://sudomaine.urlanding.com/public/images/sections/1746717974_1000158870.png" height="600" alt="">
+        </div>
+    </section>
+    <script>
+        let selectedSize = '';
+        const sizeButtons = document.querySelectorAll('.size-btn');
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                selectedSize = this.getAttribute('data-size');
+                sizeButtons.forEach(btn => btn.style.backgroundColor = '');
+                this.style.backgroundColor = '#ccc';
+            });
+        });
+        const form = document.getElementById('orderForm');
+        const submitButton = form.querySelector('button[type="submit"]');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const city = document.getElementById('city').value.trim();
+            // التحقق من تنسيق الهاتف (أرقام فقط)
+            if (!/^\d+$/.test(phone)) {
+                alert('رقم الهاتف يجب أن يحتوي على أرقام فقط');
+                return;
+            }
+            if (!name || !phone || !address || !city || !selectedSize) {
+                alert('يرجى ملء جميع الحقول واختيار المقاس');
+                return;
+            }
+            submitButton.disabled = true; // تعطيل الزر أثناء الإرسال
+            try {
+                const res = await fetch('http://localhost:3000/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, phone, address, city, size: selectedSize })
+                });
+                const data = await res.json();
+                alert(data.message);
+                if (res.ok) {
+                    form.reset(); // إعادة تعيين النموذج
+                    selectedSize = '';
+                    sizeButtons.forEach(btn => btn.style.backgroundColor = '');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('❌ حدث خطأ أثناء إرسال الطلب');
+            } finally {
+                submitButton.disabled = false; // إعادة تفعيل الزر
+            }
+        });
+    </script>
+</body>
+</html>
